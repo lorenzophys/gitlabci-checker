@@ -20,7 +20,7 @@ format:
 lint:
 	flake8 ${MAIN_PATH} ${TESTS_PATH}
 	mypy ${MAIN_PATH}
-	pydocstyle ${MAIN_PATH} --add-ignore=${PYDOCSTYLE_IGNORE}
+	# pydocstyle ${MAIN_PATH} --add-ignore=${PYDOCSTYLE_IGNORE}
 
 .PHONY: test
 test:

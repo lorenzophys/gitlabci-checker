@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Tuple
 from urllib.parse import urlparse
 
 import requests
@@ -24,6 +24,19 @@ def send_lint_request(gitlab_server: str, gitlab_ci: str, gitlab_token: str) -> 
         "PRIVATE-TOKEN": gitlab_token,
     }
     data = {"content": gitlab_ci}
-    response = requests.post(gitlab_server, headers=headers, json=data)
-    print(response.text)
+
+    try:
+        response = requests.post(gitlab_server, headers=headers, json=data)
+    except requests.ConnectionError:
+        return {}
+
     return json.loads(response.text)
+
+
+def parse_gitlab_response(gitlab_response: dict) -> Tuple[dict, dict]:
+    if all(
+        key in gitlab_response
+        for key in ("valid", "status", "errors", "warnings", "includes")
+    ):
+        return gitlab_response, {}
+    return {}, gitlab_response

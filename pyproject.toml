@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gitlabci-checker"
-version = "0.1.0"
+version = "0.1.1"
 description = "Checks if your gitlab-ci pipeline compiles correctly."
 authors = ["Lorenzo Maffioli <lorenzo.maffioli@gmail.com>"]
 readme = "README.md"

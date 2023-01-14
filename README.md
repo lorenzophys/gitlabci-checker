@@ -39,7 +39,7 @@ Options:
 By default it will send the request to `gitlab.com`. If you want to use your own Gitlab instance you must pass the server address:
 
 ```console
-user@laptop:~$ cichecker .gitlab-ci.yaml --gitlab-server code.company.com
+user@laptop:~$ cicheck .gitlab-ci.yaml --gitlab-server code.company.com
 Everything's fine.
 ```
 
@@ -50,14 +50,14 @@ You must pass a valid token to the CLI: either as the environment variable `GITL
 If your pipeline is valid it returns a "Everything's fine." message
 
 ```console
-user@laptop:~$ cichecker .gitlab-ci.yaml
+user@laptop:~$ cicheck .gitlab-ci.yaml
 Everything's fine.
 ```
 
 If your configuration is invalid it returns an error message together with the response from Gitlab:
 
 ```console
-user@laptop:~$ cichecker .gitlab-ci.yaml
+user@laptop:~$ cicheck .gitlab-ci.yaml
 Check failed with error(s).
 {
   "status": "invalid",
@@ -71,7 +71,7 @@ Check failed with error(s).
 You can also force a failure whenever the linter returns a warning by appending `--warnings-are-errors` or `-w`:
 
 ```console
-user@laptop:~$ cichecker .gitlab-ci.yaml
+user@laptop:~$ cicheck .gitlab-ci.yaml
 Check failed with warning(s).
 {
   "status": "valid",

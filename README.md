@@ -1,7 +1,8 @@
 # Gitlabci checker
 
 ![release](https://img.shields.io/github/v/release/lorenzophys/gitlabci-checker)
-![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/lorenzophys/gitlabci-checker/test-workflow.yml?branch=main&label=tests)
+[![codecov](https://codecov.io/gh/lorenzophys/gitlabci-checker/branch/main/graph/badge.svg?token=WEZ1UH621Y)](https://codecov.io/gh/lorenzophys/gitlabci-checker)
+[![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/lorenzophys/gitlabci-checker/test-workflow.yml?branch=main&label=tests)](https://img.shields.io/github/actions/workflow/status/lorenzophys/gitlabci-checker/test-workflow.yml)
 ![pver](https://img.shields.io/pypi/pyversions/gitlabci-checker)
 ![MIT](https://img.shields.io/github/license/lorenzophys/gitlabci-checker)
 
@@ -16,7 +17,7 @@ user@laptop:~$ pip install gitlabci-checker
 You can interact with the CLI via the `cicheck` comand:
 
 ```console
-user@laptop:~$ cichecker
+user@laptop:~$ cicheck
 Usage: cicheck [OPTIONS] FILENAME
 
   Check if your gitlab-ci pipeline compiles correctly.

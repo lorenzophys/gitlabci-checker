@@ -43,6 +43,8 @@ user@laptop:~$ cichecker .gitlab-ci.yaml --gitlab-server code.company.com
 Everything's fine.
 ```
 
+You must pass a valid token to the CLI: either as the environment variable `GITLAB_TOKEN` or via the `--token` flag.
+
 ## Usage example
 
 If your pipeline is valid it returns a "Everything's fine." message

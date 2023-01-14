@@ -1,0 +1,6 @@
+- id: gitlabci-checker
+  name: gitlabci-checker
+  description: Check if your gitlab-ci pipeline compiles correctly.
+  entry: cicheck
+  language: python
+  files: .gitlab-ci.ya?ml

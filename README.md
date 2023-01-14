@@ -89,7 +89,7 @@ Check failed with warning(s).
 ```yaml
 repos:
   - repo: https://github.com/lorenzophys/gitlabci-checker
-    rev: v0.1.0
+    rev: v0.1.1
     hooks:
       - id: gitlabci-checker
         args:

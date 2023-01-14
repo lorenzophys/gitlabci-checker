@@ -2,20 +2,19 @@
 name = "gitlabci-checker"
 version = "0.1.0"
 description = "Checks if your gitlab-ci pipeline compiles correctly."
-authors = ["Lorenzo Maffioli <lorenzo.maffioli@naviparking.com>"]
+authors = ["Lorenzo Maffioli <lorenzo.maffioli@gmail.com>"]
 readme = "README.md"
 
 repository = "https://github.com/lorenzophys/gitlabci-checker"
 keywords = ["gitlab", "ci", "pipeline"]
 
 [tool.poetry.scripts]
-gitlabci-checker = "gitlabci_checker.cli:cli"
+cicheck = "gitlabci_checker.cli:cli"
 
 [tool.poetry.dependencies]
 python = "^3.7"
 click = "^8.1.3"
 requests = "^2.28.1"
-configparser = "^5.3.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.10.0"
@@ -34,6 +33,7 @@ tox-pyenv = "^1.1.0"
 types-setuptools = "^65.6.0.2"
 toml = "^0.10.2"
 types-requests = "^2.28.11.7"
+pytest-httpserver = "^1.0.6"
 
 [tool.black]
 max-line-length = 100

@@ -4,7 +4,7 @@ from unittest import mock
 import pytest
 
 from gitlabci_checker.helpers import (
-    parse_url,
+    parse_gitlab_response,
     read_pipeline_config_file,
     send_lint_request,
 )
@@ -32,28 +32,6 @@ def test_read_valid_pipeline_config_file():
 def test_read_invalid_pipeline_config_file():
     with pytest.raises(OSError):
         read_pipeline_config_file("no_file")
-
-
-@pytest.mark.parametrize(
-    "url,expected",
-    [
-        ("https://gitlab.com/lorenzophys/arepo.git", "gitlab.com"),
-        ("https://code.company.com/lorenzophys/arepo.git", "code.company.com"),
-        ("git@gitlab.com:lorenzophys/agroup/arepo.git", "gitlab.com"),
-        ("ssh://git@gitlab.com:lorenzophys/agroup/arepo.git", "gitlab.com"),
-        ("git@gitlab.com:lorenzophys/agroup/arepo.git", "gitlab.com"),
-        (
-            "git@code.company.com:lorenzophys/agroup/arepo.git",
-            "code.company.com",
-        ),
-        (
-            "ssh://git@code.company.com:lorenzophys/agroup/arepo.git",
-            "code.company.com",
-        ),
-    ],
-)
-def test_parse_hostname(url, expected):
-    assert parse_url(url) == expected
 
 
 @mock.patch("requests.post")
@@ -84,3 +62,38 @@ def test_send_lint_request(mock_requests):
         dummy_gitlab_url, headers=expected_headers, json={"content": "dummy string"}
     )
     assert response == expected_response
+
+
+@pytest.mark.parametrize(
+    "response,expected",
+    [
+        ({}, ({}, {})),
+        ({"message": "401 Unauthorized"}, ({}, {"message": "401 Unauthorized"})),
+        (
+            {"status": "valid", "errors": [], "warnings": []},
+            ({"status": "valid", "errors": [], "warnings": []}, {}),
+        ),
+        (
+            {
+                "status": "valid",
+                "errors": [],
+                "warnings": [],
+                "includes": [],
+                "valid": True,
+            },
+            (
+                {
+                    "status": "valid",
+                    "errors": [],
+                    "warnings": [],
+                    "includes": [],
+                    "valid": True,
+                },
+                {},
+            ),
+        ),
+    ],
+)
+def test_parse_gitlab_response(response, expected):
+    parsed = parse_gitlab_response(response)
+    assert parsed == expected

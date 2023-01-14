@@ -82,6 +82,21 @@ Check failed with warning(s).
 }
 ```
 
+## `pre-commit` hook
+
+`gitlabci-checker` can be also used as a [pre-commit](https://pre-commit.com) hook. For example:
+
+```yaml
+repos:
+  - repo: https://github.com/lorenzophys/gitlabci-checker
+    rev: v0.1.0
+    hooks:
+      - id: gitlabci-checker
+        args:
+          - --gitlab-server code.company.com
+          - --warnings-are-errors
+```
+
 ## License
 
 This project is licensed under the **MIT License** - see the *LICENSE* file for details.

@@ -71,7 +71,7 @@ Check failed with error(s).
 You can also force a failure whenever the linter returns a warning by appending `--warnings-are-errors` or `-w`:
 
 ```console
-user@laptop:~$ cicheck .gitlab-ci.yaml
+user@laptop:~$ cicheck .gitlab-ci.yaml --warnings-are-errors
 Check failed with warning(s).
 {
   "status": "valid",

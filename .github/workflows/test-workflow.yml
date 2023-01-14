@@ -35,9 +35,9 @@ jobs:
       run: poetry install --no-interaction
     - name: Lint
       run: |
-        poetry run flake8 isops tests
-        poetry run mypy isops --no-incremental
-        poetry run pydocstyle isops --add-ignore=D100,D104
+        poetry run flake8 gitlabci-checker tests
+        poetry run mypy gitlabci-checker
+        poetry run pydocstyle gitlabci-checker --add-ignore=D100,D104
     - name: Test
       run: poetry run pytest -vv
       

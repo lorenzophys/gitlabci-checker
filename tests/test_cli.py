@@ -16,7 +16,7 @@ def test_cli_file_not_found():
     assert result.output == expected_output
 
 
-def test_conection_error(tmp_path, httpserver, dummy_ci_config):
+def test_conection_error(tmp_path, httpserver, dummy_ci_config, httpserver_listen_address):
     ci_config = tmp_path / GITLAB_CI_YAML
     ci_config.write_text(dummy_ci_config)
 
@@ -27,10 +27,10 @@ def test_conection_error(tmp_path, httpserver, dummy_ci_config):
 
     httpserver.expect_request("/api/v4/ci/lint", headers=headers).respond_with_json({})
 
+    host, port = httpserver_listen_address
+
     runner = CliRunner()
-    result = runner.invoke(
-        cli, [str(ci_config), "-t", "", "-k", "-s", "localhost:8888"]
-    )
+    result = runner.invoke(cli, [str(ci_config), "-t", "", "-k", "-s", f"{host}:{port}"])
 
     expected_output = (
         "Check failed due to a connection error:\n"
@@ -42,7 +42,7 @@ def test_conection_error(tmp_path, httpserver, dummy_ci_config):
     assert result.output == expected_output
 
 
-def test_404_error(tmp_path, httpserver, dummy_ci_config):
+def test_404_error(tmp_path, httpserver, dummy_ci_config, httpserver_listen_address):
 
     ci_config = tmp_path / GITLAB_CI_YAML
     ci_config.write_text(dummy_ci_config)
@@ -53,27 +53,22 @@ def test_404_error(tmp_path, httpserver, dummy_ci_config):
     }
 
     gitlab_response = {"error": "404 Not Found"}
-    httpserver.expect_request("/api/v4/ci/lint", headers=headers).respond_with_json(
-        gitlab_response
-    )
+    httpserver.expect_request("/api/v4/ci/lint", headers=headers).respond_with_json(gitlab_response)
+
+    host, port = httpserver_listen_address
 
     runner = CliRunner()
-    result = runner.invoke(
-        cli, [str(ci_config), "-t", "", "-k", "-s", "localhost:8888"]
-    )
+    result = runner.invoke(cli, [str(ci_config), "-t", "", "-k", "-s", f"{host}:{port}"])
 
     expected_output = (
-        "Check failed with the following error:\n"
-        "{\n"
-        '  "error": "404 Not Found"\n'
-        "}\n"
+        "Check failed with the following error:\n" "{\n" '  "error": "404 Not Found"\n' "}\n"
     )
 
     assert result.exit_code == 1
     assert result.output == expected_output
 
 
-def test_bad_pipeline(tmp_path, httpserver, dummy_ci_config):
+def test_bad_pipeline(tmp_path, httpserver, dummy_ci_config, httpserver_listen_address):
 
     ci_config = tmp_path / GITLAB_CI_YAML
     ci_config.write_text(dummy_ci_config)
@@ -89,14 +84,12 @@ def test_bad_pipeline(tmp_path, httpserver, dummy_ci_config):
         "warnings": [],
     }
 
-    httpserver.expect_request("/api/v4/ci/lint", headers=headers).respond_with_json(
-        gitlab_response
-    )
+    httpserver.expect_request("/api/v4/ci/lint", headers=headers).respond_with_json(gitlab_response)
+
+    host, port = httpserver_listen_address
 
     runner = CliRunner()
-    result = runner.invoke(
-        cli, [str(ci_config), "-t", "", "-k", "-s", "localhost:8888"]
-    )
+    result = runner.invoke(cli, [str(ci_config), "-t", "", "-k", "-s", f"{host}:{port}"])
 
     expected_output = (
         "Check failed with error(s).\n"
@@ -113,7 +106,9 @@ def test_bad_pipeline(tmp_path, httpserver, dummy_ci_config):
     assert result.output == expected_output
 
 
-def test_valid_pipeline_with_warning(tmp_path, httpserver, dummy_ci_config):
+def test_valid_pipeline_with_warning(
+    tmp_path, httpserver, dummy_ci_config, httpserver_listen_address
+):
 
     ci_config = tmp_path / GITLAB_CI_YAML
     ci_config.write_text(dummy_ci_config)
@@ -129,14 +124,12 @@ def test_valid_pipeline_with_warning(tmp_path, httpserver, dummy_ci_config):
         "warnings": [],
     }
 
-    httpserver.expect_request("/api/v4/ci/lint", headers=headers).respond_with_json(
-        gitlab_response
-    )
+    httpserver.expect_request("/api/v4/ci/lint", headers=headers).respond_with_json(gitlab_response)
+
+    host, port = httpserver_listen_address
 
     runner = CliRunner()
-    result = runner.invoke(
-        cli, [str(ci_config), "-t", "", "-k", "-s", "localhost:8888"]
-    )
+    result = runner.invoke(cli, [str(ci_config), "-t", "", "-k", "-s", f"{host}:{port}"])
 
     expected_output = "Everything's fine.\n"
 
@@ -144,7 +137,7 @@ def test_valid_pipeline_with_warning(tmp_path, httpserver, dummy_ci_config):
     assert result.output == expected_output
 
 
-def test_valid_pipeline(tmp_path, httpserver, dummy_ci_config):
+def test_valid_pipeline(tmp_path, httpserver, dummy_ci_config, httpserver_listen_address):
 
     ci_config = tmp_path / GITLAB_CI_YAML
     ci_config.write_text(dummy_ci_config)
@@ -156,14 +149,12 @@ def test_valid_pipeline(tmp_path, httpserver, dummy_ci_config):
 
     gitlab_response = {"status": "valid", "errors": [], "warnings": []}
 
-    httpserver.expect_request("/api/v4/ci/lint", headers=headers).respond_with_json(
-        gitlab_response
-    )
+    httpserver.expect_request("/api/v4/ci/lint", headers=headers).respond_with_json(gitlab_response)
+
+    host, port = httpserver_listen_address
 
     runner = CliRunner()
-    result = runner.invoke(
-        cli, [str(ci_config), "-t", "", "-k", "-s", "localhost:8888"]
-    )
+    result = runner.invoke(cli, [str(ci_config), "-t", "", "-k", "-s", f"{host}:{port}"])
 
     expected_output = "Everything's fine.\n"
 
@@ -171,7 +162,9 @@ def test_valid_pipeline(tmp_path, httpserver, dummy_ci_config):
     assert result.output == expected_output
 
 
-def test_valid_pipeline_but_warnings_are_errors(tmp_path, httpserver, dummy_ci_config):
+def test_valid_pipeline_but_warnings_are_errors(
+    tmp_path, httpserver, dummy_ci_config, httpserver_listen_address
+):
 
     ci_config = tmp_path / GITLAB_CI_YAML
     ci_config.write_text(dummy_ci_config)
@@ -187,14 +180,12 @@ def test_valid_pipeline_but_warnings_are_errors(tmp_path, httpserver, dummy_ci_c
         "warnings": ["this is a warning"],
     }
 
-    httpserver.expect_request("/api/v4/ci/lint", headers=headers).respond_with_json(
-        gitlab_response
-    )
+    httpserver.expect_request("/api/v4/ci/lint", headers=headers).respond_with_json(gitlab_response)
+
+    host, port = httpserver_listen_address
 
     runner = CliRunner()
-    result = runner.invoke(
-        cli, [str(ci_config), "-t", "", "-k", "-w", "-s", "localhost:8888"]
-    )
+    result = runner.invoke(cli, [str(ci_config), "-t", "", "-k", "-w", "-s", f"{host}:{port}"])
 
     expected_output = (
         "Check failed with warning(s).\n"

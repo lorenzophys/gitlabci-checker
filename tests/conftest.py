@@ -1,9 +1,14 @@
+import socket
+
 import pytest
 
 
 @pytest.fixture(scope="session")
 def httpserver_listen_address():
-    return ("localhost", 8888)
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind(("localhost", 0))
+        address = s.getsockname()
+        return address
 
 
 @pytest.fixture(scope="session")

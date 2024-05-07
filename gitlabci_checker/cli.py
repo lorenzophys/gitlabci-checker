@@ -99,14 +99,8 @@ def cli(
         click.secho(message=out, fg="red", bold=False, nl=True)
         ctx.exit(1)
     else:
-        if (
-            lint_results["status"] == "valid"
-            and lint_results["warnings"]
-            and warnings_are_errors
-        ):
-            click.secho(
-                message="Check failed with warning(s).", fg="yellow", bold=True, nl=True
-            )
+        if lint_results["status"] == "valid" and lint_results["warnings"] and warnings_are_errors:
+            click.secho(message="Check failed with warning(s).", fg="yellow", bold=True, nl=True)
             out = json.dumps(lint_results, indent=2)
             click.secho(message=out, fg="yellow", bold=False, nl=True)
             ctx.exit(1)
@@ -114,9 +108,7 @@ def cli(
             click.secho(message="Everything's fine.", fg="green", bold=True, nl=True)
             ctx.exit(0)
         else:
-            click.secho(
-                message="Check failed with error(s).", fg="red", bold=True, nl=True
-            )
+            click.secho(message="Check failed with error(s).", fg="red", bold=True, nl=True)
             out = json.dumps(lint_results, indent=2)
             click.secho(message=out, fg="red", bold=False, nl=True)
             ctx.exit(1)
